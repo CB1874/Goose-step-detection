@@ -123,7 +123,7 @@ class ble_server():
         tran_z = (HexSting2decimal(data[82:84] + data[80:82])) / 1000
         global q
         q = [angle_x, angle_y, angle_z]
-        #print(q)
+        #print("0481:",q)
 
     def get_latest_data(self):
         return self.data_buffer[-1] if self.data_buffer else None

@@ -18,7 +18,7 @@ imu_devices = [
     # #{"address": "03:85:14:03:1C:E3", "name": "0273"},
     # {"address": "03:85:14:03:1C:CC", "name": "1006"},
     # {"address": "03:85:14:03:1C:6B", "name": "0810"},
-    {"address": "03:85:14:03:1A:D6", "name": "0169"},
+    {"address": "03:85:14:03:94:AF", "name": "0240"},
     # {"address": "03:85:14:03:94:25", "name": "0184"},
     # imu的蓝牙地址和名称
 ]
@@ -123,7 +123,7 @@ class ble_server():
         tran_z = (HexSting2decimal(data[82:84] + data[80:82])) / 1000
         global q
         q = [angle_x, angle_y, angle_z]
-        #print(q)
+        # print(q)
 
     def get_latest_data(self):
         return self.data_buffer[-1] if self.data_buffer else None
@@ -136,19 +136,19 @@ class ble_server():
         self.data_transition()
 
 
-if __name__ == "__main__":
-    t_pool = []
-    imu_instances = []
-    imu_order = []
-    # 连接传感器
-    for device_info in imu_devices:
-        imu = ble_server(device_info["address"], device_info["name"])
-        # print(imu.get_latest_data())
-        imu_instances.append(imu)
-        imu_order.append(device_info["name"])
-        t_pool.append(Thread(target=imu.start))
-
-    print("imu的次序是：", imu_order)
-
-    for t in t_pool:
-        t.start()
+# if __name__ == "__main__":
+#     t_pool = []
+#     imu_instances = []
+#     imu_order = []
+#     # 连接传感器
+#     for device_info in imu_devices:
+#         imu = ble_server(device_info["address"], device_info["name"])
+#         # print(imu.get_latest_data())
+#         imu_instances.append(imu)
+#         imu_order.append(device_info["name"])
+#         t_pool.append(Thread(target=imu.start))
+#
+#     print("imu的次序是：", imu_order)
+#
+#     for t in t_pool:
+#         t.start()

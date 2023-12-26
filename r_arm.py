@@ -18,7 +18,7 @@ imu_devices = [
     # #{"address": "03:85:14:03:1C:E3", "name": "0273"},
     # {"address": "03:85:14:03:1C:CC", "name": "1006"},
     # {"address": "03:85:14:03:1C:6B", "name": "0810"},
-    {"address": "03:85:14:03:94:0E", "name": "0823"},
+    {"address": "03:85:14:03:1A:D6", "name": "0169"},
     # {"address": "03:85:14:03:94:25", "name": "0184"},
     # imu的蓝牙地址和名称
 ]
@@ -123,7 +123,7 @@ class ble_server():
         tran_z = (HexSting2decimal(data[82:84] + data[80:82])) / 1000
         global q
         q = [angle_x, angle_y, angle_z]
-        #print(q)
+        #print("0169:",q)
 
     def get_latest_data(self):
         return self.data_buffer[-1] if self.data_buffer else None

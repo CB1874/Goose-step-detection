@@ -5,6 +5,8 @@ import r_arm
 import standarddataset as sds
 from threading import Thread
 from tkinter import *
+import pygame
+import time
 
 def connect():
     if __name__ == "__main__":
@@ -77,6 +79,7 @@ def connect():
 
 
 def check():
+    global count
     if abs(l_leg.q[1] - sds.leg_down) < sds.error_range:
         if abs(r_leg.q[1] - sds.leg_up) < sds.error_range:
             if abs(l_arm.q[0] - sds.l_arm_up) < sds.error_range:
@@ -84,12 +87,16 @@ def check():
                     lb.config(text="动作合格")
                 else:
                     lb.config(text="右臂不合格")
+                    count=count+1
             else:
                 lb.config(text="左臂不合格")
+                count = count + 1
         elif r_leg.q[1] < sds.leg_up - sds.error_range:
             lb.config(text="右腿动作幅度过大")
+            count = count + 1
         else:
             lb.config(text="右腿动作幅度过小")
+            count = count + 1
     elif abs(l_leg.q[1] - sds.leg_up) < sds.error_range:
         if abs(r_leg.q[1] - sds.leg_down) < sds.error_range:
             if abs(l_arm.q[0] - sds.l_arm_down) < sds.error_range:
@@ -97,21 +104,43 @@ def check():
                     lb.config(text="动作合格")
                 else:
                     lb.config(text="右臂不合格")
+                    count = count + 1
             else:
                 lb.config(text="左臂不合格")
+                count = count + 1
         else:
             lb.config(text="右腿不合格")
+            count = count + 1
     else:
         lb.config(text="左腿不合格")
+        count = count + 1
 
 connect()
 
+def play_audio(file_path):
+    pygame.init()
+    pygame.mixer.init()
+    pygame.mixer.music.load(file_path)
+    pygame.mixer.music.play()
+
+
 flag = 1
+file_path = "cai.mp3"
+count = 0
 
 def start():
+    global count
     if flag:
         check()
-        win.after(200, start)  # 在200毫秒（0.2秒）后再次调用hello函数
+        if count>100:
+            bg_label.config(image=bg_image2)
+            play_audio(file_path)
+            while pygame.mixer.music.get_busy():
+                pygame.time.Clock().tick(10)
+            count=0
+            time.sleep(1)
+            bg_label.config(image=bg_image)
+        win.after(300, start)  # 在300毫秒（0.3秒）后再次调用start函数a
 
 # 重新开始检测
 def start_again():
@@ -120,8 +149,11 @@ def start_again():
     start()
 
 def end_start():
+    global count
     global flag
     flag = 0
+    count=0
+
 
 win = Tk()
 # 标题名字
@@ -138,7 +170,7 @@ win.resizable(False, False)
 win.attributes("-topmost", 1)
 
 bg_image = PhotoImage(file="bg.png")
-
+bg_image2 = PhotoImage(file="bg2.png")
 bg_label = Label(win, image=bg_image)
 bg_label.place(relwidth=1, relheight=1)
 
